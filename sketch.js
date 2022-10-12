@@ -74,8 +74,8 @@ function draw() {
     // flappy.velocity.x = 4;
     flappy.velocity.y = 12;
 
-    if (keyDown("space")) {
-      flappy.velocity.y = -9
+    if (keyDown("space") || touches[0]){
+      flappy.velocity.y = -9;
     }
 
     if(back.position.x<=620){
@@ -120,7 +120,7 @@ function draw() {
     }
   }
   else{
-    if(keyWentDown("space")){
+    if(keyWentDown("space") || touches[0]){
       topPipe.velocity.x = -10;
       botPipe.velocity.x = -10;
       back.velocity.x = -10;
