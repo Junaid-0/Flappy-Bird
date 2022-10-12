@@ -10,6 +10,7 @@ var gameOver, gameOverImg;
 
 var score = 0;
 
+var playing = true;
 
 function preload() {
 
@@ -68,54 +69,68 @@ function draw() {
   
   background("grey");
 
-  // flappy.velocity.x = 4;
-  flappy.velocity.y = 12;
+  if(playing){
 
-  if (keyDown("space")) {
-    flappy.velocity.y = -9
-  }
+    // flappy.velocity.x = 4;
+    flappy.velocity.y = 12;
 
-  if(back.position.x<=620){
-    back.position.x = 900;
-    console.log("Crossed");
-  }
+    if (keyDown("space")) {
+      flappy.velocity.y = -9
+    }
+
+    if(back.position.x<=620){
+      back.position.x = 900;
+      console.log("Crossed");
+    }
 
 
-  textSize(30);
-  text("Score: "+score,flappy.x-200,flappy.y+50).depth = flappy.depth+1;
-  
+    textSize(30);
+    text("Score: "+score,flappy.x-200,flappy.y+50).depth = flappy.depth+1;
     
+      
 
-  if(topPipe.position.x<=-55){
-    // createPipes();
-    topPipe.position.x = 1595;
-    botPipe.position.x = 1595;
+    if(topPipe.position.x<=-55){
+      // createPipes();
+      topPipe.position.x = 1595;
+      botPipe.position.x = 1595;
 
-    topPipe.position.y = Math.round(random(-300, 100));
-    botPipe.position.y = topPipe.position.y+800;
+      topPipe.position.y = Math.round(random(-300, 100));
+      botPipe.position.y = topPipe.position.y+800;
 
-    console.log("Pipe Crossed\n");
+      console.log("Pipe Crossed\n");
+    }
+
+    textSize(30);
+    text("Score: "+score,768,384)
+
+    // flappy.collide(topPipe);
+
+    if (flappy.isTouching(topPipe) || flappy.isTouching(botPipe) || flappy.position.y>=690 || flappy.position.y<=20) {
+      flappy.velocity.x = 0;
+      flappy.velocity.y = 0;
+      topPipe.velocity.x = 0;
+      botPipe.velocity.x = 0;
+      back.velocity.x = 0;
+      gameOver.visible = true;
+      playing = false;
+    }
+
+    if(flappy.x>=topPipe.x+10){
+      score += 1;
+    }
   }
-
-  textSize(30);
-  text("Score: "+score,768,384)
-
-  // flappy.collide(topPipe);
-
-  if (flappy.isTouching(topPipe) || flappy.isTouching(botPipe) || flappy.position.y>=690 || flappy.position.y<=20) {
-    // flappy.visible = false;
-    flappy.velocity.y = 0;
-    flappy.velocity.x = 0;
-    topPipe.velocity.x = 0;
-    botPipe.velocity.x = 0;
-    back.velocity.x = 0;
-    gameOver.visible = true;
+  else{
+    if(keyWentDown("space")){
+      topPipe.velocity.x = -10;
+      botPipe.velocity.x = -10;
+      back.velocity.x = -10;
+      gameOver.visible = false;
+      playing = true;
+      flappy.y = 200;
+      botPipe.x = 1300;
+      topPipe.x = 1300;
+    }
   }
-
-  if(flappy.x>=topPipe.x+10){
-    score += 1;
-  }
-
     
 
   drawSprites();
